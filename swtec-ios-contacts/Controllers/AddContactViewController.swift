@@ -36,7 +36,7 @@ class AddContactViewController: UIViewController {
             return
         }
     
-        NotificationCenter.default.post(name: ContactsListViewController.notificationCenter, object: nil, userInfo: ["name": nameTextField.text!, "phone": phoneNumberTextField.text!])
+        NotificationCenter.default.post(name: ContactsListViewController.notificationCenter, object: nil, userInfo: ["name": newName, "phone": newPhone])
         navigationController?.popViewController(animated: true)
     }
 }
