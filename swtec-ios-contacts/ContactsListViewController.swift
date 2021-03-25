@@ -8,16 +8,23 @@
 import UIKit
 import CoreData
 
-class ContactsListViewController : UITableViewController {
+class ContactsListViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     static let notificationCenter = Notification.Name("contactBookNotification")
     
     @IBOutlet var addButton: UIBarButtonItem!
     
+    @IBOutlet var tableView: UITableView!
+    let spinner = UIActivityIndicatorView(style: .large)
+    
     var contacts: [NSManagedObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundView = spinner
+        spinner.hidesWhenStopped = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(saveNewContact(notification:)), name:ContactsListViewController.notificationCenter, object: nil)
         
@@ -27,7 +34,6 @@ class ContactsListViewController : UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         do {
             contacts = try fetchDataFromCoreData()
         } catch let error as NSError {
@@ -35,23 +41,26 @@ class ContactsListViewController : UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         contacts.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "personCell", for: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "contactCell", for: indexPath)
         let contact = contacts[indexPath.row]
         
-        cell.textLabel?.text = contact.value(forKey: "name") as? String
+        if let fistName = contact.value(forKey: "firstName") as? String,
+           let lastName = contact.value(forKey: "lastName") as? String {
+            cell.textLabel?.text = fistName + " " + lastName
+        }
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         true
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             deleteContactFromCoreData(indexPath: indexPath.row)
             do {
@@ -63,9 +72,9 @@ class ContactsListViewController : UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let phone = contacts[indexPath.row].value(forKeyPath: "phone") as? String,
-              let name = contacts[indexPath.row].value(forKeyPath: "name") as? String,
+              let name = contacts[indexPath.row].value(forKeyPath: "firstName") as? String,
               let phoneUrl = URL(string: "tel://" + phone),
               UIApplication.shared.canOpenURL(phoneUrl)
         else {
@@ -75,10 +84,83 @@ class ContactsListViewController : UITableViewController {
         UIApplication.shared.open(phoneUrl)
     }
 
+    @IBAction func clearContacts(_ sender: Any) {
+        clearContactsData()
+        do {
+            contacts = try fetchDataFromCoreData()
+        } catch let error as NSError {
+            print("Couldn't fetch \(String(describing: error)), \(String(describing: error.userInfo))")
+        }
+        tableView.reloadData()
+    }
+    
+    @IBAction func updateDataByGCD(_ sender: Any) {
+        spinner.startAnimating()
+        clearContactsData()
+        do {
+            contacts = try fetchDataFromCoreData()
+        } catch let error as NSError {
+            print("Couldn't fetch \(String(describing: error)), \(String(describing: error.userInfo))")
+        }
+        tableView.reloadData()
+        
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let contactsRepo = GistContactsRepository(path: ConstantsEnum.contactsURL, managedContext: appDelegate.persistentContainer.newBackgroundContext())
+            
+            DispatchQueue.global(qos: .utility).async {
+                if (try? contactsRepo.getContacts()) != nil {
+                    DispatchQueue.main.async {
+                        do {
+                            self.contacts = try self.fetchDataFromCoreData()
+                        } catch let error as NSError {
+                            print("Couldn't fetch \(String(describing: error)), \(String(describing: error.userInfo))")
+                        }
+                        self.tableView.reloadData()
+                        self.spinner.stopAnimating()
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBAction func updateByOperationQueue(_ sender: Any) {
+        spinner.startAnimating()
+        clearContactsData()
+        do {
+            contacts = try fetchDataFromCoreData()
+        } catch let error as NSError {
+            print("Couldn't fetch \(String(describing: error)), \(String(describing: error.userInfo))")
+        }
+        tableView.reloadData()
+        
+        let downloadQueue = OperationQueue()
+        
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            let contactsRepo = GistContactsRepository(path: ConstantsEnum.contactsURL, managedContext: appDelegate.persistentContainer.newBackgroundContext())
+            let downloader = ContactsDownloader(contactsRepo)
+            downloader.completionBlock = {
+                if downloader.isCancelled {
+                    return
+                }
+                DispatchQueue.main.async {
+                    do {
+                        self.contacts = try self.fetchDataFromCoreData()
+                    } catch let error as NSError {
+                        print("Couldn't fetch \(String(describing: error)), \(String(describing: error.userInfo))")
+                    }
+                    self.tableView.reloadData()
+                    self.spinner.stopAnimating()
+                }
+            }
+            downloadQueue.addOperation(downloader)
+        }
+        
+    }
+    
     // MARK: - New contact notification handler
     
     @objc func saveNewContact(notification: Notification) {
-        guard let data = notification.userInfo as? [String: String], let newContactName = data["name"], let newContactPhone = data["phone"] else {
+        guard let data = notification.userInfo as? [String: String], let newContactName = data["firstName"], let newContactPhone = data["phone"] else {
             return
         }
         
@@ -124,7 +206,7 @@ class ContactsListViewController : UITableViewController {
                 alert.addTextField{
                     (textField: UITextField) in
                     textField.addTarget(self, action: #selector(self.alertNameTextChanged(sender:)), for: .editingChanged)
-                    textField.text = "\(((contact.value(forKey: "name") as? String)) ?? "Enter Name")"
+                    textField.text = "\(((contact.value(forKey: "firstName") as? String)) ?? "Enter Name")"
                 }
                 
                 alert.addTextField{
@@ -198,6 +280,24 @@ class ContactsListViewController : UITableViewController {
         return try managedContext.fetch(fetchRequest)
     }
     
+    private func clearContactsData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        else {
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Contact")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+        
+        do {
+            try managedContext.execute(deleteRequest)
+            try managedContext.save()
+        } catch {
+            // error
+        }
+    }
+    
     private func saveNewContactToCoreData(newContactName name: String, newContactPhone phone: String) {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -213,8 +313,10 @@ class ContactsListViewController : UITableViewController {
 
         let contact = NSManagedObject(entity: entity, insertInto: managedContext)
         
-        contact.setValue(name, forKeyPath: "name")
+        contact.setValue(name, forKeyPath: "firstName")
         contact.setValue(phone, forKeyPath: "phone")
+        contact.setValue("", forKeyPath: "lastName")
+        contact.setValue("", forKeyPath: "email")
         
         do {
             try managedContext.save()
@@ -245,7 +347,7 @@ class ContactsListViewController : UITableViewController {
             return
         }
         let managedContext = appDelegate.persistentContainer.viewContext
-        contact.setValue(name, forKeyPath: "name")
+        contact.setValue(name, forKeyPath: "firstName")
         contact.setValue(phone, forKeyPath: "phone")
         do {
             try managedContext.save()
