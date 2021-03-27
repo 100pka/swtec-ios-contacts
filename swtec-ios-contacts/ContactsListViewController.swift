@@ -12,12 +12,17 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
     
     static let notificationCenter = Notification.Name("contactBookNotification")
     
-    @IBOutlet var addButton: UIBarButtonItem!
+    @IBOutlet private var addButton: UIBarButtonItem!
     
-    @IBOutlet var tableView: UITableView!
-    let spinner = UIActivityIndicatorView(style: .large)
+    @IBOutlet private var tableView: UITableView!
     
-    var contacts: [NSManagedObject] = []
+    private let spinner: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
+    
+    private var contacts: [NSManagedObject] = []
+    
+    private let utilityQueue: DispatchQueue = DispatchQueue.global(qos: .utility)
+    
+    private let operationQueue: OperationQueue = OperationQueue()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +88,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         saveNewCallToCoreData(newCallName: name, newCallTime: getTime())
         UIApplication.shared.open(phoneUrl)
     }
-
+    
     @IBAction func clearContacts(_ sender: Any) {
         clearContactsData()
         do {
@@ -94,7 +99,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         tableView.reloadData()
     }
     
-    @IBAction func updateDataByGCD(_ sender: Any) {
+    @IBAction func updateByGCD(_ sender: Any) {
         spinner.startAnimating()
         clearContactsData()
         do {
@@ -107,7 +112,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             let contactsRepo = GistContactsRepository(path: ConstantsEnum.contactsURL, managedContext: appDelegate.persistentContainer.newBackgroundContext())
             
-            DispatchQueue.global(qos: .utility).async {
+            utilityQueue.async {
                 if (try? contactsRepo.getContacts()) != nil {
                     DispatchQueue.main.async {
                         do {
@@ -133,11 +138,9 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         }
         tableView.reloadData()
         
-        let downloadQueue = OperationQueue()
-        
         if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             let contactsRepo = GistContactsRepository(path: ConstantsEnum.contactsURL, managedContext: appDelegate.persistentContainer.newBackgroundContext())
-            let downloader = ContactsDownloader(contactsRepo)
+            let downloader = ContactsDownloaderOperation(contactsRepo)
             downloader.completionBlock = {
                 if downloader.isCancelled {
                     return
@@ -152,7 +155,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
                     self.spinner.stopAnimating()
                 }
             }
-            downloadQueue.addOperation(downloader)
+            operationQueue.addOperation(downloader)
         }
         
     }
@@ -170,7 +173,6 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
     }
     
     // MARK: - Actions
-    
     
     @objc func longPressedForUpdateContact(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
@@ -211,6 +213,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
                 
                 alert.addTextField{
                     (textField: UITextField) in
+                    textField.keyboardType = .phonePad
                     textField.addTarget(self, action: #selector(self.alertPhoneTextChanged(sender:)), for: .editingChanged)
                     textField.text = "\(((contact.value(forKey: "phone") as? String)) ?? "Enter Phone")"
                 }
@@ -310,7 +313,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         else {
             return
         }
-
+        
         let contact = NSManagedObject(entity: entity, insertInto: managedContext)
         
         contact.setValue(name, forKeyPath: "firstName")
@@ -368,7 +371,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         else {
             return
         }
-
+        
         let call = NSManagedObject(entity: entity, insertInto: managedContext)
         
         call.setValue(name, forKeyPath: "name")
@@ -395,9 +398,8 @@ enum ContactsListError: Error {
 
 extension String {
     func isValidPhone() -> Bool {
-            let phoneRegex = "^[0-9+]{0,1}+[0-9]{5,16}$"
-            let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
-            return phoneTest.evaluate(with: self)
-        }
+        let phoneRegex = "^[0-9+]{0,1}+[0-9]{5,16}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
+        return phoneTest.evaluate(with: self)
+    }
 }
-

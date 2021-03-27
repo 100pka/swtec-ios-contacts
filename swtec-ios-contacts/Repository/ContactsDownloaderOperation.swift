@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ContactsDownloader: Operation {
+class ContactsDownloaderOperation: Operation {
     let repository: ContactsRepository
     
     init(_ repository: ContactsRepository) {
@@ -18,9 +18,10 @@ class ContactsDownloader: Operation {
         if isCancelled {
             return
         }
-        
-        if (try? repository.getContacts()) != nil {
-            return
+        do {
+            try repository.getContacts()
+        } catch {
+            print("Something went wrong while loading contacts: \(error)")
         }
     }
 }

@@ -56,7 +56,7 @@ class GistContactsRepository: ContactsRepository {
             }
         }
         task.resume()
-        // TODO: add timeout
+
         if sem.wait(timeout: .now() + 15) == .timedOut {
             print("Request is timed out")
             return [NSManagedObject]()

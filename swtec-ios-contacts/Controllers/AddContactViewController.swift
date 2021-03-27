@@ -11,12 +11,13 @@ import UIKit
 
 class AddContactViewController: UIViewController {
     
-    @IBOutlet var nameTextField: UITextField!
+    @IBOutlet private var nameTextField: UITextField!
     
-    @IBOutlet var phoneNumberTextField: UITextField!
+    @IBOutlet private var phoneNumberTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        phoneNumberTextField.keyboardType = .phonePad
     }
     
     

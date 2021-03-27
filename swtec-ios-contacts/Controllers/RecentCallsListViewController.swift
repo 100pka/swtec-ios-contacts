@@ -10,7 +10,7 @@ import CoreData
 
 class RecentCallsListViewController : UIViewController  {
     
-    @IBOutlet var callsListTableView: UITableView!
+    @IBOutlet private var callsListTableView: UITableView!
     
     var calls: [NSManagedObject] = []
     
