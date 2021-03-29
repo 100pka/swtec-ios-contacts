@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class ContactListWorker {
-    func getContacts() -> [DBContact] {
+    func getContacts() -> [Contact] {
         return DBService.shared.getContacts()
     }
 }
