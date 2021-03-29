@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 @objc(Contact)
-public class Contact : NSManagedObject, Codable {
+public class DBContact : NSManagedObject, Codable {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Contact> {
-        return NSFetchRequest<Contact>(entityName: "Contact")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<DBContact> {
+        return NSFetchRequest<DBContact>(entityName: "Contact")
     }
 
     @NSManaged public var email: String?
@@ -59,7 +59,7 @@ public class Contact : NSManagedObject, Codable {
     }
 }
 
-extension Contact : Identifiable {
+extension DBContact : Identifiable {
 
 }
 

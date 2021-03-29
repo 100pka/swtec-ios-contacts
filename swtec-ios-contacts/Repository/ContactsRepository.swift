@@ -45,7 +45,7 @@ class GistContactsRepository: ContactsRepository {
             decoder.userInfo[CodingUserInfoKey.context!] = self.context
         
             do {
-                result = try decoder.decode([Contact].self, from: data)
+                result = try decoder.decode([DBContact].self, from: data)
                 do {
                     try self.context.save()
                 } catch let error as NSError {

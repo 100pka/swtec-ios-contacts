@@ -11,6 +11,12 @@
 		E0526862260C460000AD5EA8 /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0526860260C460000AD5EA8 /* Contact+CoreDataProperties.swift */; };
 		E0662BCE260C63BC00780CDE /* ContactsDownloaderOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BCD260C63BC00780CDE /* ContactsDownloaderOperation.swift */; };
 		E0662BD0260CA65E00780CDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BCF260CA65E00780CDE /* SceneDelegate.swift */; };
+		E0662BD42610425100780CDE /* ContactListInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BD32610425100780CDE /* ContactListInteractor.swift */; };
+		E0662BD6261043DE00780CDE /* ContactListModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BD5261043DE00780CDE /* ContactListModels.swift */; };
+		E0662BD82610453A00780CDE /* ContactListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BD72610453A00780CDE /* ContactListPresenter.swift */; };
+		E0662BDA261046DD00780CDE /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BD9261046DD00780CDE /* ContactListViewController.swift */; };
+		E0662BDC261059E400780CDE /* ContactListRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BDB261059E400780CDE /* ContactListRouter.swift */; };
+		E0662BDE26105B4200780CDE /* ContactListWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0662BDD26105B4200780CDE /* ContactListWorker.swift */; };
 		E076F7A9260337130060D6FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E076F7A8260337130060D6FD /* AppDelegate.swift */; };
 		E076F7B2260337150060D6FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E076F7B1260337150060D6FD /* Assets.xcassets */; };
 		E076F7B5260337150060D6FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E076F7B3260337150060D6FD /* LaunchScreen.storyboard */; };
@@ -27,6 +33,12 @@
 		E0526860260C460000AD5EA8 /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E0662BCD260C63BC00780CDE /* ContactsDownloaderOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsDownloaderOperation.swift; sourceTree = "<group>"; };
 		E0662BCF260CA65E00780CDE /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../../../.Trash/SceneDelegate.swift; sourceTree = "<group>"; };
+		E0662BD32610425100780CDE /* ContactListInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListInteractor.swift; sourceTree = "<group>"; };
+		E0662BD5261043DE00780CDE /* ContactListModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListModels.swift; sourceTree = "<group>"; };
+		E0662BD72610453A00780CDE /* ContactListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListPresenter.swift; sourceTree = "<group>"; };
+		E0662BD9261046DD00780CDE /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		E0662BDB261059E400780CDE /* ContactListRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListRouter.swift; sourceTree = "<group>"; };
+		E0662BDD26105B4200780CDE /* ContactListWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListWorker.swift; sourceTree = "<group>"; };
 		E076F7A5260337130060D6FD /* swtec-ios-contacts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swtec-ios-contacts.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E076F7A8260337130060D6FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E076F7B1260337150060D6FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -51,6 +63,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E0662BD12610420E00780CDE /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				E0662BD22610421B00780CDE /* Contact list scene */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		E0662BD22610421B00780CDE /* Contact list scene */ = {
+			isa = PBXGroup;
+			children = (
+				E0662BD32610425100780CDE /* ContactListInteractor.swift */,
+				E0662BD5261043DE00780CDE /* ContactListModels.swift */,
+				E0662BD72610453A00780CDE /* ContactListPresenter.swift */,
+				E0662BD9261046DD00780CDE /* ContactListViewController.swift */,
+				E0662BDB261059E400780CDE /* ContactListRouter.swift */,
+				E0662BDD26105B4200780CDE /* ContactListWorker.swift */,
+			);
+			path = "Contact list scene";
+			sourceTree = "<group>";
+		};
+		E0662BDF26105D0A00780CDE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		E076F79C260337130060D6FD = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +111,8 @@
 		E076F7A7260337130060D6FD /* swtec-ios-contacts */ = {
 			isa = PBXGroup;
 			children = (
+				E0662BDF26105D0A00780CDE /* Model */,
+				E0662BD12610420E00780CDE /* Scenes */,
 				E0BD6E7E260B1AB500F11662 /* Repository */,
 				E0C1F765260462EB00C97744 /* Controllers */,
 				E076F7A8260337130060D6FD /* AppDelegate.swift */,
@@ -176,9 +218,15 @@
 			files = (
 				E0C1F77526050FB600C97744 /* AddContactViewController.swift in Sources */,
 				E076F7A9260337130060D6FD /* AppDelegate.swift in Sources */,
+				E0662BDC261059E400780CDE /* ContactListRouter.swift in Sources */,
+				E0662BD82610453A00780CDE /* ContactListPresenter.swift in Sources */,
+				E0662BDE26105B4200780CDE /* ContactListWorker.swift in Sources */,
 				E0BD6E80260B1AD600F11662 /* ContactsRepository.swift in Sources */,
+				E0662BD42610425100780CDE /* ContactListInteractor.swift in Sources */,
+				E0662BDA261046DD00780CDE /* ContactListViewController.swift in Sources */,
 				E0C1F77D26065F0E00C97744 /* Contacts.xcdatamodeld in Sources */,
 				E0C1F769260463D100C97744 /* ContactsListViewController.swift in Sources */,
+				E0662BD6261043DE00780CDE /* ContactListModels.swift in Sources */,
 				E0662BD0260CA65E00780CDE /* SceneDelegate.swift in Sources */,
 				E0526862260C460000AD5EA8 /* Contact+CoreDataProperties.swift in Sources */,
 				E0C1F7A8260785EE00C97744 /* RecentCallCell.swift in Sources */,

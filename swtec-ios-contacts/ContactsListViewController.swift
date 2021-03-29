@@ -178,7 +178,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         if sender.state == UIGestureRecognizer.State.began {
             let touchPoint = sender.location(in: self.tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint),
-               let contact = contacts[indexPath.row] as? Contact {
+               let contact = contacts[indexPath.row] as? DBContact {
                 let alert = UIAlertController(title: "Update Contact", message: "", preferredStyle: .alert)
                 
                 let updateAction = UIAlertAction(title: "Update", style: .default, handler: {
@@ -331,7 +331,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
     
     private func deleteContactFromCoreData(indexPath index: Int) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-              let contact = contacts[index] as? Contact
+              let contact = contacts[index] as? DBContact
         else {
             return
         }
@@ -344,7 +344,7 @@ class ContactsListViewController : UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    private func updateData(newName name: String, newPhone phone: String, newContact contact: Contact) {
+    private func updateData(newName name: String, newPhone phone: String, newContact contact: DBContact) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate
         else {
             return
