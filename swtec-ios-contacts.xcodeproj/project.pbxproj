@@ -32,7 +32,6 @@
 		E082A47426144AF600F467E8 /* PhoneValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E082A47326144AF600F467E8 /* PhoneValidation.swift */; };
 		E082A47726144CFB00F467E8 /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = E082A47626144CFB00F467E8 /* Async.swift */; };
 		E082A4792615F0AB00F467E8 /* CallHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E082A4782615F0AB00F467E8 /* CallHistoryViewController.swift */; };
-		E0BD6E80260B1AD600F11662 /* ContactsRepository_.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BD6E7F260B1AD600F11662 /* ContactsRepository_.swift */; };
 		E0C1F77526050FB600C97744 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C1F77426050FB600C97744 /* ContactViewController.swift */; };
 		E0C1F77D26065F0E00C97744 /* Contacts.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E0C1F77B26065F0E00C97744 /* Contacts.xcdatamodeld */; };
 		E0C1F7A8260785EE00C97744 /* RecentCallCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C1F7A7260785EE00C97744 /* RecentCallCell.swift */; };
@@ -67,7 +66,6 @@
 		E082A47326144AF600F467E8 /* PhoneValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneValidation.swift; sourceTree = "<group>"; };
 		E082A47626144CFB00F467E8 /* Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
 		E082A4782615F0AB00F467E8 /* CallHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHistoryViewController.swift; sourceTree = "<group>"; };
-		E0BD6E7F260B1AD600F11662 /* ContactsRepository_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsRepository_.swift; sourceTree = "<group>"; };
 		E0C1F77426050FB600C97744 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		E0C1F77C26065F0E00C97744 /* Contacts.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = Contacts.xcdatamodel; sourceTree = "<group>"; };
 		E0C1F7A7260785EE00C97744 /* RecentCallCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCallCell.swift; sourceTree = "<group>"; };
@@ -127,7 +125,6 @@
 			children = (
 				E082A4652612196900F467E8 /* Services */,
 				E0662BD12610420E00780CDE /* Views */,
-				E0BD6E7E260B1AB500F11662 /* Repository */,
 				E076F7A8260337130060D6FD /* AppDelegate.swift */,
 				E082A4562611D02F00F467E8 /* SceneDelegate.swift */,
 				E076F7B1260337150060D6FD /* Assets.xcassets */,
@@ -185,14 +182,6 @@
 				E0C1F77426050FB600C97744 /* ContactViewController.swift */,
 			);
 			path = AddNewContact;
-			sourceTree = "<group>";
-		};
-		E0BD6E7E260B1AB500F11662 /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				E0BD6E7F260B1AD600F11662 /* ContactsRepository_.swift */,
-			);
-			path = Repository;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,7 +258,6 @@
 				E0250C90261AE167002CAE1F /* ContactCell.swift in Sources */,
 				E0C1F77526050FB600C97744 /* ContactViewController.swift in Sources */,
 				E076F7A9260337130060D6FD /* AppDelegate.swift in Sources */,
-				E0BD6E80260B1AD600F11662 /* ContactsRepository_.swift in Sources */,
 				E082A4572611D02F00F467E8 /* SceneDelegate.swift in Sources */,
 				E082A4792615F0AB00F467E8 /* CallHistoryViewController.swift in Sources */,
 				E082A46C2612198F00F467E8 /* CallHistoryRepository.swift in Sources */,
