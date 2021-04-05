@@ -82,18 +82,18 @@ class GistContactsRepo: ContactsRepository {
     
     func delete(contact: Contact) throws {
         let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
+        guard index != nil else {
             return
         }
-        contacts.remove(at: index)
+        contacts.remove(at: index!)
     }
     
     func update(contact: Contact) throws {
         let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
+        guard index != nil else {
             return
         }
-        contacts[index] = contact
+        contacts[index!] = contact
     }
     
     func addAll(contacts: [Contact]) throws {

@@ -54,19 +54,19 @@ class FileManagerRepo: ContactsRepository {
     
     func delete(contact: Contact) throws {
         let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
+        guard index != nil else {
             return
         }
-        self.contacts.remove(at: index)
+        self.contacts.remove(at: index!)
         try saveContactsOnDisk()
     }
     
     func update(contact: Contact) throws {
         let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
+        guard index != nil else {
             return
         }
-        contacts[index] = contact
+        contacts[index!] = contact
         try saveContactsOnDisk()
     }
     

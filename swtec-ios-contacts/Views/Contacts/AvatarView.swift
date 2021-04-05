@@ -62,7 +62,7 @@ class AvatarView: UIView {
         let circle = UIBezierPath(arcCenter: center, radius: rect.height/2, startAngle: 0, endAngle: 2 * .pi, clockwise: true)
         avatarColor.setFill()
         circle.fill()
-        let text = NSAttributedString(string: text)
+        let text = NSAttributedString(string: self.text)
         text.draw(at: CGPoint(x: center.x-text.size().width/2, y: center.y-text.size().height/2))
         
     }
