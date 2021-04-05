@@ -14,4 +14,5 @@ class RecentCallCell : UITableViewCell {
     
     @IBOutlet var timeTextLabel: UILabel!
     
+    @IBOutlet var phoneTextLabel: UILabel!
 }
