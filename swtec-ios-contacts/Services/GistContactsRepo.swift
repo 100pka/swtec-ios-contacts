@@ -49,6 +49,7 @@ class GistContactsRepo: ContactsRepository {
                 let lastname: String
                 let phone: String
                 let email: String
+                let photoUrl: String?
             }
             
             do {
@@ -56,15 +57,17 @@ class GistContactsRepo: ContactsRepository {
                     Contact(recordId: UUID().uuidString,
                             firstName: $0.firstname,
                             lastName: $0.lastname,
-                            phone: $0.phone)
-                }.sorted{ $0.firstName.lowercased() < $1.firstName.lowercased() }
+                            phone: $0.phone,
+                            photoUrl: $0.photoUrl)
+                }
+//                .sorted{ $0.firstName.lowercased() < $1.firstName.lowercased() }
             } catch {
                 resultError = error
             }
         }
         task.resume()
 
-        if sem.wait(timeout: .now() + 15) == .timedOut {
+        if sem.wait(timeout: .now() + 30) == .timedOut {
             print("Request is timed out")
             return contacts
         }
@@ -81,19 +84,15 @@ class GistContactsRepo: ContactsRepository {
     }
     
     func delete(contact: Contact) throws {
-        let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
-            return
+        if let index = contacts.firstIndex(where: { $0.recordId == contact.recordId }) {
+            contacts.remove(at: index)
         }
-        contacts.remove(at: index)
     }
     
     func update(contact: Contact) throws {
-        let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
-            return
+        if let index = contacts.firstIndex(where: { $0.recordId == contact.recordId }) {
+            contacts[index] = contact
         }
-        contacts[index] = contact
     }
     
     func addAll(contacts: [Contact]) throws {

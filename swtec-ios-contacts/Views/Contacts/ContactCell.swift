@@ -15,4 +15,13 @@ class ContactCell : UITableViewCell {
     @IBOutlet var phoneTextLabel: UILabel!
     
     @IBOutlet var avatarView: AvatarView!
+    
+    @IBOutlet var avatarImageView: UIImageView!
+    
+    override func prepareForReuse() {
+        avatarView.setNeedsDisplay()
+        avatarImageView.isHidden = true
+        avatarView.isHidden = true
+        super.prepareForReuse()
+    }
 }

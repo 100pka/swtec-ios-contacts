@@ -7,6 +7,7 @@
 
 import UIKit
 import ContactsUI
+import SwiftyGif
 
 class ContactsViewController: UIViewController {
     
@@ -133,11 +134,24 @@ extension ContactsViewController: UITableViewDataSource {
         
         cell.nameTextLabel?.text = "\(contact.firstName) \(contact.lastName)"
         cell.phoneTextLabel?.text = contact.phone
-        guard let firstLetter = contact.firstName.first?.uppercased(),
-              let secondLetter = contact.lastName.first?.uppercased() else {
-            return cell
+        
+        if let photoUrl = contact.photoUrl,
+           let url = URL(string: photoUrl)
+        {
+            cell.avatarView.isHidden = true
+            cell.avatarImageView.isHidden = false
+            cell.avatarImageView.setGifFromURL(url)
         }
-        cell.avatarView.text = firstLetter + secondLetter
+        else {
+            cell.avatarView.isHidden = false
+            cell.avatarImageView.isHidden = true
+            guard let firstLetter = contact.firstName.first?.uppercased(),
+                  let secondLetter = contact.lastName.first?.uppercased()
+            else {
+                return cell
+            }
+            cell.avatarView.text = firstLetter + secondLetter
+        }
         return cell
     }
 }

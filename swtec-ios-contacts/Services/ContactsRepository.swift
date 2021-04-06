@@ -7,12 +7,14 @@
 
 import Foundation
 
+
 struct Contact : Codable {
     let recordId: String
     let firstName: String
     let lastName: String
     let phone: String
     var birthday: Date? = nil
+    var photoUrl: String? = nil
 }
 
 struct ContactsData {

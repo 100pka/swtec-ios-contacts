@@ -40,7 +40,7 @@ class FileManagerRepo: ContactsRepository {
         }
         let data = try Data(contentsOf: path, options: .mappedIfSafe)
         self.contacts = try self.decoder.decode([Contact].self, from: data)
-            .sorted{ $0.firstName.lowercased() < $1.firstName.lowercased() }
+//            .sorted{ $0.firstName.lowercased() < $1.firstName.lowercased() }
         if contacts.isEmpty {
             throw ContactsListError.runtimeError("Empty contacts file")
         }
@@ -53,21 +53,17 @@ class FileManagerRepo: ContactsRepository {
     }
     
     func delete(contact: Contact) throws {
-        let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
-            return
+        if let index = contacts.firstIndex(where: { $0.recordId == contact.recordId }) {
+            self.contacts.remove(at: index)
+            try saveContactsOnDisk()
         }
-        self.contacts.remove(at: index)
-        try saveContactsOnDisk()
     }
     
     func update(contact: Contact) throws {
-        let index = contacts.firstIndex{ $0.recordId == contact.recordId }
-        guard let index = index else {
-            return
+        if let index = contacts.firstIndex(where: { $0.recordId == contact.recordId }) {
+            contacts[index] = contact
+            try saveContactsOnDisk()
         }
-        contacts[index] = contact
-        try saveContactsOnDisk()
     }
     
     func addAll(contacts: [Contact]) throws {
