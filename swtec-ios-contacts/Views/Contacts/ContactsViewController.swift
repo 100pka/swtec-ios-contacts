@@ -117,6 +117,14 @@ extension ContactsViewController: ContactsView {
     func reloadContacts() {
         contactsTableView.reloadData()
     }
+    
+    func call(phoneUrl: URL) {
+        guard UIApplication.shared.canOpenURL(phoneUrl)
+        else {
+            return
+        }
+        UIApplication.shared.open(phoneUrl)
+    }
 }
 
 

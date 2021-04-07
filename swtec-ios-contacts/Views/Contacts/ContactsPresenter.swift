@@ -83,13 +83,17 @@ extension ContactsPresenter: ContactsViewOutput {
     }
     
     func makeCall(to contact: Contact) {
-        
         do {
             try callHistoryRepository.add(record: CallRecord(timestamp: Date(),
                                                              phone: contact.phone))
         } catch {
             view?.showError(error)
         }
+        guard let phoneUrl = URL(string: "tel://" + contact.phone)
+        else {
+            return
+        }
+        view?.call(phoneUrl: phoneUrl)
     }
     
     func newContactAdded(_ contact: Contact) {

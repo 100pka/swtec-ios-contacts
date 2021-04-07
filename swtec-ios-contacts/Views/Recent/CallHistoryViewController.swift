@@ -29,7 +29,7 @@ class CallHistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        contactsRepository = Services.factory.getContactsRepository()
+        contactsRepository = Services.factory.getFileManagerContactsRepository()
         callHistoryRepository = Services.factory.getCallHistoryRepository()
         
         callHistoryTableView.dataSource = self

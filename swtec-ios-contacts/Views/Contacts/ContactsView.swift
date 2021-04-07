@@ -10,11 +10,10 @@ import Foundation
 protocol ContactsView: AnyObject {
     func showContacts(_ contacts: [Contact])
     func showError(_ error: Error)
-    
     func showProgress()
     func hideProgress()
-    
     func reloadContacts()
+    func call(phoneUrl: URL)
 }
 
 protocol ContactsViewOutput {
