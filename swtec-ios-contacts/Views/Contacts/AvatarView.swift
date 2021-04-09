@@ -33,19 +33,17 @@ class AvatarView: UIView {
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
-        let scale = UIScreen.main.bounds.width / self.bounds.width
+        guard let windowWidth = self.window?.frame.size.width else {
+            return
+        }
+
+        let scale = windowWidth / self.bounds.width
         if !self.isScaled {
             UIView.animate(withDuration: 2, animations: {
                 let grow = CGAffineTransform(scaleX: scale, y: scale)
-                let move = CGAffineTransform(translationX: UIScreen.main.bounds.width/2.5, y: 0)
+                let move = CGAffineTransform(translationX: windowWidth/2.5, y: 0)
                 self.transform = grow.concatenating(move)
             })
-//            let positionAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.position))
-//            let oldPosition = self.layer.position
-//            let newPosition = CGPoint(x: oldPosition.x + 100, y: oldPosition.y + 100)
-//            positionAnimation.duration = 2
-//            self.layer.position = newPosition
-//            self.layer.add(positionAnimation, forKey: "animate")
             
         } else {
             UIView.animate(withDuration: 2, animations: {

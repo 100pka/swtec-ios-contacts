@@ -254,7 +254,11 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="NXb-L1-Y6b" id="ras-08-C0p"/>
+                        <outlet property="addContactButton" destination="3gX-2o-L6X" id="972-9d-5Su"/>
+                        <outlet property="clearButton" destination="d8a-Ys-iOd" id="2WP-L0-66o"/>
                         <outlet property="contactsTableView" destination="Rlt-ec-9yg" id="6SK-gi-qh0"/>
+                        <outlet property="gcdButton" destination="Ati-Dm-H9k" id="Rew-aL-BZh"/>
+                        <outlet property="operationQueueButton" destination="4if-2l-q0f" id="jtL-Cn-yAZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TSd-Em-eer" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

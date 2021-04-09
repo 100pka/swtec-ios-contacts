@@ -67,9 +67,9 @@ class GistContactsRepo: ContactsRepository {
         }
         task.resume()
 
-        if sem.wait(timeout: .now() + 30) == .timedOut {
+        if sem.wait(timeout: .now() + 15) == .timedOut {
             print("Request is timed out")
-            return contacts
+            throw ContactsListError.runtimeError("Request is timed out")
         }
         
         if let error = resultError {

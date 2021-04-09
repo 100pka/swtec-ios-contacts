@@ -14,10 +14,16 @@ class ContactsViewController: UIViewController {
     private enum Identifiers {
         static let contactCell = "contactCell"
         static let addNewContact = "addNewContact"
+        static let errorTitle = "Error"
     }
 
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private var contactsTableView: UITableView!
+    
+    @IBOutlet var gcdButton: UIButton!
+    @IBOutlet var operationQueueButton: UIButton!
+    @IBOutlet var clearButton: UIBarButtonItem!
+    @IBOutlet var addContactButton: UIBarButtonItem!
     
     private var output: ContactsViewOutput!
     private var contacts: [Contact] = []
@@ -96,12 +102,20 @@ extension ContactsViewController: ContactsView {
         contactsTableView.isHidden = true
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
+        gcdButton.isEnabled = false
+        operationQueueButton.isEnabled = false
+        clearButton.isEnabled = false
+        addContactButton.isEnabled = false
     }
     
     func hideProgress() {
         activityIndicator.stopAnimating()
         activityIndicator.isHidden = true
         contactsTableView.isHidden = false
+        gcdButton.isEnabled = true
+        operationQueueButton.isEnabled = true
+        clearButton.isEnabled = true
+        addContactButton.isEnabled = true
     }
     
     
@@ -111,7 +125,11 @@ extension ContactsViewController: ContactsView {
     }
     
     func showError(_ error: Error) {
-        
+        let alert = UIAlertController(title: Identifiers.errorTitle, message: "\(error)", preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Cancel", style: .default, handler: { action in
+                                    self.hideProgress() })
+        alert.addAction(cancel)
+        self.present(alert, animated: true)
     }
     
     func reloadContacts() {
